@@ -207,8 +207,10 @@ int32_t dwc_otg_hcd_handle_sof_intr (dwc_otg_hcd_t *_hcd)
 			if((qh->do_split)&&dwc_frame_num_gt(_hcd->frame_number, 
 				dwc_frame_num_inc(qh->start_split_frame, 4))&&(qtd->complete_split))
 			{
+#ifdef DWC_OTG_DEBUG
 			    DWC_PRINT("frame_number 0x%x, start 0x%x, complete: %x", 
 			        _hcd->frame_number, qh->start_split_frame, qtd->complete_split);
+#endif
 				qtd->complete_split = 0;
 				
 				qh->sched_frame = dwc_frame_num_inc(qh->start_split_frame,
@@ -650,7 +652,7 @@ static int update_urb_state_xfer_comp(dwc_hc_t *_hc,
 		}
 	}
 
-#ifdef DEBUG
+#ifdef DWC_OTG_DEBUG
 	{
 		hctsiz_data_t 	hctsiz;
 		hctsiz.d32 = dwc_read_reg32(&_hc_regs->hctsiz);
@@ -1235,7 +1237,7 @@ static void update_urb_state_xfer_intr(dwc_hc_t *_hc,
 							    _halt_status, NULL);
 	_urb->actual_length += bytes_transferred;
 
-#ifdef DEBUG
+#ifdef DWC_OTG_DEBUG
 	{
 		hctsiz_data_t 	hctsiz;
 		hctsiz.d32 = dwc_read_reg32(&_hc_regs->hctsiz);
