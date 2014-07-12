@@ -204,7 +204,7 @@ extern BOOLEAN fgIsUnderEarlierSuspend;
 *                              C O N S T A N T S
 ********************************************************************************
 */
-#define WIFI_NVRAM_FILE_NAME   "/system/etc/firmware/WIFI_MT5931"
+#define WIFI_NVRAM_FILE_NAME   "/lib/firmware/rikomagic/WIFI_MT5931"
 #define WIFI_NVRAM_CUSTOM_NAME "/data/nvram/APCFG/APRDEB/WIFI_CUSTOM"
 
 

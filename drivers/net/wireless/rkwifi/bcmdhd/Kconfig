@@ -8,21 +8,21 @@ config BCMDHD
 config BCMDHD_FW_PATH
 	depends on BCMDHD
 	string "Firmware path"
-	default "/system/etc/firmware/fw_bcmdhd.bin"
+	default "/lib/firmware/rikomagic/fw_bcmdhd.bin"
 	---help---
 	  Path to the firmware file.
 
 config BCMDHD_NVRAM_PATH
 	depends on BCMDHD
 	string "NVRAM path"
-	default "/system/etc/firmware/nvram.txt"
+	default "/lib/firmware/rikomagic/nvram.txt"
 	---help---
 	  Path to the calibration file.
 
 config BCMDHD_CONFIG_PATH
 	depends on BCMDHD
 	string "Config path"
-	default "/system/etc/firmware/config.txt"
+	default "/lib/firmware/rikomagic/config.txt"
 	---help---
 	  Path to the driver configuration file.
 
