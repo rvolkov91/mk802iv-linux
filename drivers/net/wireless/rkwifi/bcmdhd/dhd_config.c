@@ -127,7 +127,7 @@ dhd_conf_set_fw_name_by_chip(dhd_pub_t *dhd, char *dst, char *src)
     fw_type = (strstr(&src[i], "_mfg") ?
         FW_TYPE_MFG : (strstr(&src[i], "_apsta") ?
         FW_TYPE_APSTA : (strstr(&src[i], "_p2p") ?
-        FW_TYPE_P2P : FW_TYPE_STA)));
+        FW_TYPE_P2P : FW_TYPE_APSTA)));
 
     if (first) {
         chip = dhd_bus_chip_id(dhd);
