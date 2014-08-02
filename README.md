@@ -1,5 +1,7 @@
 Kitkat RK3188 source code from Rikomagic
 
+Configured to use with MK802IV with AP6210 wifi chipset.
+
 With some modifications in hopes to make MK802IV stick working as quad-core
 home server and WIFI router.
 
