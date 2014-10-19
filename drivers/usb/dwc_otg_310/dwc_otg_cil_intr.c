@@ -88,7 +88,7 @@ int32_t dwc_otg_handle_otg_intr(dwc_otg_core_if_t * core_if)
 	gotgctl_data_t gotgctl;
 	gintmsk_data_t gintmsk;
 	gpwrdn_data_t gpwrdn;
-        static i = 0;
+        //static i = 0;
 	gotgint.d32 = DWC_READ_REG32(&global_regs->gotgint);
 	gotgctl.d32 = DWC_READ_REG32(&global_regs->gotgctl);
 	DWC_DEBUGPL(DBG_CIL, "++OTG Interrupt gotgint=%0x [%s]\n", gotgint.d32,

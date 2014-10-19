@@ -621,6 +621,7 @@ void dwc_otg_pcd_stop(dwc_otg_pcd_t * pcd)
 {
 	int i, num_in_eps, num_out_eps;
 	dwc_otg_pcd_ep_t *ep;
+	dctl_data_t dctl/* = {.d32=0}*/;
 
 	gintmsk_data_t intr_mask = {.d32 = 0 };
 
@@ -666,7 +667,6 @@ void dwc_otg_pcd_stop(dwc_otg_pcd_t * pcd)
 	}
 
     /* do soft disconnect */
-    dctl_data_t dctl = {.d32=0};
     dctl.d32 = DWC_READ_REG32( &pcd->core_if->dev_if->dev_global_regs->dctl );
     dctl.b.sftdiscon = 1;
     DWC_WRITE_REG32( &pcd->core_if->dev_if->dev_global_regs->dctl, dctl.d32 );
@@ -4273,7 +4273,7 @@ do { \
 									&& (pcd->ep0state == EP0_OUT_DATA_PHASE))
 									status.d32 = core_if->dev_if->out_desc_addr->status.d32;
 								if (pcd->ep0state == EP0_OUT_STATUS_PHASE)
-									status.d32 = status.d32 = core_if->dev_if->
+									status.d32 = core_if->dev_if->
 									out_desc_addr->status.d32;
 								
 								if (status.b.sr) {

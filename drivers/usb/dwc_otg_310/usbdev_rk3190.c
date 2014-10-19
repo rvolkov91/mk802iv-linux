@@ -69,7 +69,7 @@ int dwc_otg_check_dpdm(void)
     // check dp,dm
         if((*otg_hprt0 & 0xc00)==0xc00)//check hprt[11:10] 
             bus_status = 2;
-        //*(unsigned int*)(GRF_REG_BASE + GRF_UOC0_CON0) = 0x10001000;
+        // *(unsigned int*)(GRF_REG_BASE + GRF_UOC0_CON0) = 0x10001000;
     }
 out:
     return bus_status;

@@ -1640,9 +1640,9 @@ void dwc_otg_core_dev_init(dwc_otg_core_if_t * core_if)
 	fifosize_data_t txfifosize;
 	dthrctl_data_t dthrctl;
 	fifosize_data_t ptxfifosize;
-	uint16_t rxfsiz, nptxfsiz;
-	gdfifocfg_data_t gdfifocfg = {.d32 = 0 };
-	hwcfg3_data_t hwcfg3 = {.d32 = 0 };
+	//uint16_t rxfsiz, nptxfsiz;
+	//gdfifocfg_data_t gdfifocfg = {.d32 = 0 };
+	//hwcfg3_data_t hwcfg3 = {.d32 = 0 };
 	gotgctl_data_t gotgctl = {.d32 = 0 };
 	
 	/* Restart the Phy Clock */
@@ -2070,8 +2070,8 @@ void dwc_otg_core_host_init(dwc_otg_core_if_t * core_if)
 	hprt0_data_t hprt0 = {.d32 = 0 };
 	fifosize_data_t nptxfifosize;
 	fifosize_data_t ptxfifosize;
-	uint16_t rxfsiz, nptxfsiz, hptxfsiz;
-	gdfifocfg_data_t gdfifocfg = {.d32 = 0 };
+	//uint16_t rxfsiz, nptxfsiz, hptxfsiz;
+	//gdfifocfg_data_t gdfifocfg = {.d32 = 0 };
 	int i;
 	hcchar_data_t hcchar;
 	hcfg_data_t hcfg;

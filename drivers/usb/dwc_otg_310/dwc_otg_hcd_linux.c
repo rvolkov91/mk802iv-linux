@@ -429,8 +429,8 @@ int otg20_hcd_init( struct platform_device *_dev )
     dwc_otg_device_t *otg_dev = dwc_get_device_platform_data(_dev);
 	int retval = 0;
     int irq;
-	DWC_DEBUGPL(DBG_HCD, "DWC OTG HCD INIT\n");
     static u64 usb_dmamask = 0xffffffffUL;
+	DWC_DEBUGPL(DBG_HCD, "DWC OTG HCD INIT\n");
 
 	/* Set device flags indicating whether the HCD supports DMA. */
 	if (dwc_otg_is_dma_enable(otg_dev->core_if)) {
@@ -522,8 +522,8 @@ int host20_hcd_init( struct platform_device *_dev )
     dwc_otg_device_t *otg_dev = dwc_get_device_platform_data(_dev);
 	int retval = 0;
     int irq;
-	DWC_DEBUGPL(DBG_HCD, "DWC OTG HCD INIT\n");
     static u64 usb_dmamask = 0xffffffffUL;
+	DWC_DEBUGPL(DBG_HCD, "DWC OTG HCD INIT\n");
 
 	/* Set device flags indicating whether the HCD supports DMA. */
 	if (dwc_otg_is_dma_enable(otg_dev->core_if)) {

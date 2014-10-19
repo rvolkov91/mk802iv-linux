@@ -676,7 +676,7 @@ static irqreturn_t dwc_otg_common_irq(int irq, void *dev)
  *
  * @param _dev
  */
-static void host20_driver_remove(	 struct platform_device *_dev  )
+static __devexit int host20_driver_remove(	 struct platform_device *_dev  )
 {
 
     dwc_otg_device_t *otg_dev = dwc_get_device_platform_data(_dev);
@@ -685,14 +685,14 @@ static void host20_driver_remove(	 struct platform_device *_dev  )
 	if (!otg_dev) {
 		/* Memory allocation for the dwc_otg_device failed. */
 		DWC_DEBUGPL(DBG_ANY, "%s: otg_dev NULL!\n", __func__);
-		return;
+		return -1;
 	}
 #ifndef DWC_DEVICE_ONLY
 	if (otg_dev->hcd) {
 		hcd_remove(_dev);
 	} else {
 		DWC_DEBUGPL(DBG_ANY, "%s: otg_dev->hcd NULL!\n", __func__);
-		return;
+		return -1;
 	}
 #endif
 
@@ -701,7 +701,7 @@ static void host20_driver_remove(	 struct platform_device *_dev  )
 		pcd_remove(_dev);
 	} else {
 		DWC_DEBUGPL(DBG_ANY, "%s: otg_dev->pcd NULL!\n", __func__);
-		return;
+		return -1;
 	}
 #endif
 	/*
@@ -712,14 +712,14 @@ static void host20_driver_remove(	 struct platform_device *_dev  )
 		free_irq(platform_get_irq(_dev,0), otg_dev );
 	} else {
 		DWC_DEBUGPL(DBG_ANY, "%s: There is no installed irq!\n", __func__);
-		return;
+		return -1;
 	}
 
 	if (otg_dev->core_if) {
 		dwc_otg_cil_remove(otg_dev->core_if);
 	} else {
 		DWC_DEBUGPL(DBG_ANY, "%s: otg_dev->core_if NULL!\n", __func__);
-		return;
+		return -1;
 	}
 
 	/*
@@ -740,6 +740,8 @@ static void host20_driver_remove(	 struct platform_device *_dev  )
 	 */
 
 	dwc_set_device_platform_data(_dev, 0);
+
+	return 0;
 }
 
 /**
@@ -962,7 +964,7 @@ static void dwc_otg_driver_shutdown(struct platform_device *_dev )
 static struct platform_driver dwc_host_driver = {
 	.driver = {.name = (char *)dwc_host20_driver_name,},
 	.probe = host20_driver_probe,
-	.remove = host20_driver_remove,
+	.remove = __devexit_p(host20_driver_remove),
 	.suspend = dwc_otg_driver_suspend,
 	.resume = dwc_otg_driver_resume,
 };
@@ -977,7 +979,7 @@ static struct platform_driver dwc_host_driver = {
  *
  * @param _dev
  */
-static void otg20_driver_remove(	 struct platform_device *_dev  )
+static int otg20_driver_remove(	 struct platform_device *_dev  )
 {
 
     dwc_otg_device_t *otg_dev = dwc_get_device_platform_data(_dev);
@@ -986,14 +988,14 @@ static void otg20_driver_remove(	 struct platform_device *_dev  )
 	if (!otg_dev) {
 		/* Memory allocation for the dwc_otg_device failed. */
 		DWC_DEBUGPL(DBG_ANY, "%s: otg_dev NULL!\n", __func__);
-		return;
+		return -1;
 	}
 #ifndef DWC_DEVICE_ONLY
 	if (otg_dev->hcd) {
 		hcd_remove(_dev);
 	} else {
 		DWC_DEBUGPL(DBG_ANY, "%s: otg_dev->hcd NULL!\n", __func__);
-		return;
+		return -1;
 	}
 #endif
 
@@ -1002,7 +1004,7 @@ static void otg20_driver_remove(	 struct platform_device *_dev  )
 		pcd_remove(_dev);
 	} else {
 		DWC_DEBUGPL(DBG_ANY, "%s: otg_dev->pcd NULL!\n", __func__);
-		return;
+		return -1;
 	}
 #endif
 	/*
@@ -1013,14 +1015,14 @@ static void otg20_driver_remove(	 struct platform_device *_dev  )
 		free_irq(platform_get_irq(_dev,0), otg_dev );
 	} else {
 		DWC_DEBUGPL(DBG_ANY, "%s: There is no installed irq!\n", __func__);
-		return;
+		return -1;
 	}
 
 	if (otg_dev->core_if) {
 		dwc_otg_cil_remove(otg_dev->core_if);
 	} else {
 		DWC_DEBUGPL(DBG_ANY, "%s: otg_dev->core_if NULL!\n", __func__);
-		return;
+		return -1;
 	}
 
 	/*
@@ -1041,6 +1043,8 @@ static void otg20_driver_remove(	 struct platform_device *_dev  )
 	 */
 
 	dwc_set_device_platform_data(_dev, 0);
+
+	return 0;
 }
 
 
@@ -1230,7 +1234,7 @@ fail:
 static struct platform_driver dwc_otg_driver = {
 	.driver = {.name = (char *)dwc_otg20_driver_name,},
 	.probe = otg20_driver_probe,
-	.remove = otg20_driver_remove,
+	.remove = __devexit_p(otg20_driver_remove),
 	.suspend = dwc_otg_driver_suspend,
 	.resume = dwc_otg_driver_resume,
 	.shutdown = dwc_otg_driver_shutdown,

@@ -1420,6 +1420,7 @@ void dwc_otg_msc_unlock(dwc_otg_pcd_t *pcd)
 unsigned int dwc_otg_battery_detect(bool det_type)
 {
     printk("%s\n",__func__);
+    return 0;
 }
 
 static void dwc_phy_reconnect(struct work_struct *work)
@@ -1571,7 +1572,7 @@ void dwc_otg_pcd_timer_init(dwc_otg_pcd_t *pcd, struct platform_device *dev)
 {
     //struct dwc_otg_platform_data *pldata = dev->dev.platform_data;
     struct dwc_otg_device* otg_dev = dev->dev.platform_data;
-    struct dwc_otg_platform_data *pldata = otg_dev->pldata;
+    //struct dwc_otg_platform_data *pldata = otg_dev->pldata;
     
     init_timer( &pcd->check_vbus_timer );
     pcd->check_vbus_timer.function = dwc_otg_pcd_check_vbus_timer;

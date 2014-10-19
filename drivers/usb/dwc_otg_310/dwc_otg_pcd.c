@@ -1466,9 +1466,9 @@ int dwc_otg_pcd_ep_enable(dwc_otg_pcd_t * pcd,
 	dwc_otg_pcd_ep_t *ep = NULL;
 	const usb_endpoint_descriptor_t *desc;
 	dwc_irqflags_t flags;
-	fifosize_data_t dptxfsiz = {.d32 = 0 };
-	gdfifocfg_data_t gdfifocfg = {.d32 = 0 };
-	gdfifocfg_data_t gdfifocfgbase = {.d32 = 0 };
+	//fifosize_data_t dptxfsiz = {.d32 = 0 };
+	//gdfifocfg_data_t gdfifocfg = {.d32 = 0 };
+	//gdfifocfg_data_t gdfifocfgbase = {.d32 = 0 };
 	int retval = 0;
 	int i, epcount;
 
@@ -1633,7 +1633,7 @@ int dwc_otg_pcd_ep_disable(dwc_otg_pcd_t * pcd, void *ep_handle)
 	dwc_dma_t dma_desc_addr;
 	gdfifocfg_data_t gdfifocfgbase = {.d32 = 0 };
 	gdfifocfg_data_t gdfifocfg = {.d32 = 0 };
-	fifosize_data_t dptxfsiz = {.d32 = 0 };
+	//fifosize_data_t dptxfsiz = {.d32 = 0 };
 
 	ep = get_ep_from_handle(pcd, ep_handle);
 

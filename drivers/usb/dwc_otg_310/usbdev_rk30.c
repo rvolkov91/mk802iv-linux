@@ -259,7 +259,7 @@ void dwc_otg_uart_mode(void* pdata, int enter_usb_uart_mode)
 #if defined(CONFIG_ARCH_RK3066B) || defined(CONFIG_ARCH_RK3188)
 void usb20otg_power_enable(int enable)
 { 
-    unsigned int usbgrf_status = *(unsigned int*)(USBGRF_SOC_STATUS0);
+    //unsigned int usbgrf_status = *(unsigned int*)(USBGRF_SOC_STATUS0);
     if(0 == enable)//disable
     {
         gpio_set_value(RK3066B_OTG_DRV_VBUS, GPIO_LOW); 
