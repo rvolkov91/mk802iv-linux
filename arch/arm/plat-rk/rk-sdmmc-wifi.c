@@ -244,7 +244,6 @@ struct rksdmmc_gpio_wifi_moudle  rk_platform_wifi_gpio = {
 };
 
 
-
 #ifdef CONFIG_WIFI_CONTROL_FUNC
 #if defined(CONFIG_USE_SDMMC0_FOR_WIFI_DEVELOP_BOARD)
 static int rk29sdk_wifi_mmc0_status(struct device *dev);
@@ -364,10 +363,10 @@ static int rk29sdk_wifi_status_register(void (*callback)(int card_present, void 
 
 static int __init rk29sdk_wifi_bt_gpio_control_init(void)
 {
-    rk29sdk_init_wifi_mem();    
+    rk29sdk_init_wifi_mem();
  #if !(!!SDMMC_USE_NEW_IOMUX_API)
     rk29_mux_api_set(rk_platform_wifi_gpio.power_n.iomux.name, rk_platform_wifi_gpio.power_n.iomux.fgpio);
- #endif   
+ #endif
 
 #ifdef CONFIG_MACH_RK_FAC
 	if(wifi_pwr!=-1)

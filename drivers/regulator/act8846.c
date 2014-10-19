@@ -44,7 +44,9 @@ struct act8846 {
 	struct i2c_client *i2c;
 	int num_regulators;
 	struct regulator_dev **rdev;
+#ifdef CONFIG_HAS_EARLYSUSPEND
 	struct early_suspend act8846_suspend;
+#endif
 };
 
 struct act8846 *g_act8846;

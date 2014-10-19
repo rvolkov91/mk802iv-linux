@@ -119,7 +119,9 @@ struct rk808 {
 	int num_regulators;
 	struct regulator_dev **rdev;
 	struct wake_lock 	irq_wake;
+#ifdef CONFIG_HAS_EARLYSUSPEND
 	struct early_suspend rk808_suspend;
+#endif
 	struct mutex irq_lock;
 	int irq_base;
 	int irq_num;

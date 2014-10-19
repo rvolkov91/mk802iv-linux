@@ -638,7 +638,9 @@ static struct platform_device device_ion = {
 #ifdef CONFIG_SDMMC_RK29
 #include "board-rk3188-ds1006h-sdmmc-config.c"
 #include "../plat-rk/rk-sdmmc-ops.c"
-#include "../plat-rk/rk-sdmmc-wifi.c"
+#ifndef CONFIG_WIFI_NONE
+    #include "../plat-rk/rk-sdmmc-wifi.c"
+#endif
 #endif //endif ---#ifdef CONFIG_SDMMC_RK29
 
 #ifdef CONFIG_SDMMC0_RK29
@@ -800,9 +802,11 @@ struct rk29_sdmmc_platform_data default_sdmmc1_data = {
 	.use_dma = 0,
 #endif
 
-#if defined(CONFIG_WIFI_CONTROL_FUNC) || defined(CONFIG_WIFI_COMBO_MODULE_CONTROL_FUNC)
-    .status = rk29sdk_wifi_status,
-    .register_status_notify = rk29sdk_wifi_status_register,
+#ifndef CONFIG_WIFI_NONE
+    #if defined(CONFIG_WIFI_CONTROL_FUNC) || defined(CONFIG_WIFI_COMBO_MODULE_CONTROL_FUNC)
+        .status = rk29sdk_wifi_status,
+        .register_status_notify = rk29sdk_wifi_status_register,
+    #endif
 #endif
 
 #if defined(CONFIG_SDMMC1_RK29_WRITE_PROTECT)
@@ -1220,8 +1224,10 @@ static struct platform_device *devices[] __initdata = {
 #ifdef CONFIG_ION
 	&device_ion,
 #endif
-#ifdef CONFIG_WIFI_CONTROL_FUNC
-	&rk29sdk_wifi_device,
+#ifndef CONFIG_WIFI_NONE
+    #ifdef CONFIG_WIFI_CONTROL_FUNC
+		&rk29sdk_wifi_device,
+    #endif
 #endif
 
 #if defined(CONFIG_MT6620)
@@ -2116,8 +2122,10 @@ static void __init machine_rk30_board_init(void)
 	rk_platform_add_display_devices();
 	board_usb_detect_init(RK30_PIN0_PA7);
 
-#ifdef CONFIG_WIFI_CONTROL_FUNC
-	rk29sdk_wifi_bt_gpio_control_init();
+#ifndef CONFIG_WIFI_NONE
+    #ifdef CONFIG_WIFI_CONTROL_FUNC
+		rk29sdk_wifi_bt_gpio_control_init();
+    #endif
 #endif
 
 #if defined(CONFIG_MT6620)
