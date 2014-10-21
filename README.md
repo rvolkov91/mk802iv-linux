@@ -1,7 +1,7 @@
 Kitkat RK3188 source code from Rikomagic
 _with workarounds to make it usable with Linux distributions_
 
-1. The kernel
+*** 1. The kernel ***
 
 Is old and unstable. To use the device as a server, some unstable
 functionality should be disabled.
@@ -15,7 +15,7 @@ Tested with:
 Arch Linux
 Debian wheezy (had problems with UDEV)
 
-2. Hardware
+*** 2. Hardware ***
 
 2.1 USB stack
 
