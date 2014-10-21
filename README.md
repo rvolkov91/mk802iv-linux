@@ -22,8 +22,7 @@ Debian wheezy (had problems with UDEV)
 Is the main thing that should work as stable as AK-47 if you want this
 working as the home server. Original drivers unfortunately sucks and no
 USB wifi adapters is working. The speed with mass storage, however, is
-acceptable enough, for example, for burning BLU-rays. As many as possible
-hardware returned back from the Linux kernel.
+acceptable enough, for example, for burning BLU-rays.
 
 USB stack has two versions of the DWC OTG driver.
 v2.7 looks like more stable but with limited hardware support. There is
