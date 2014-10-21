@@ -1,32 +1,54 @@
 Kitkat RK3188 source code from Rikomagic
+_with workarounds to make it usable with Linux distributions_
 
-Configured to use with MK802IV with AP6210 wifi chipset.
+1. The kernel
 
-With some modifications in hopes to make MK802IV stick working as quad-core
-home server and WIFI router.
+Is old and unstable. To use the device as a server, some unstable
+functionality should be disabled.
 
-Experience with Debian:
+Do not compile it with GCC 4.9.x toolchain. You can get the broken kernel.
+Tested with GCC 4.7.x Debian arm-linux-gnueabihf toolchain.
 
-Facts:
-+Quad-core Cortex A9 is fast enough.
-+USB stack works acceptable enough, at 10Mb/sec+ speed. Tested with:
-USB HDD & Blu-ray USB writer, various USB wifi adapters, keyboard, mice.
-+Console mapped to the primary framebuffer device.
-Change the parameter script to disable FIQ console to get FB console working
-at boot time.
+Should work with any Linux distribution which supports ARMv7.
 
-Known problems:
--The kernel is unstable and old.
--Every change in config can break the build.
--Disabling devtmpfs and using udev instead will crash the kernel. The devtmpfs
-is deprecated and should not be used in newer systems. Udev will not start
-and you need to restart it manually or from rc.local. The bug should be
-somewhere in the display driver.
--Encryption does not work with hostapd (tested on AP6210 and Realtek USB
-adapter AWUS036H). I don't know what's this, only open network does work.
--USB OTG driver is unstable and can panic the kernel.
--AP6210 WIFI driver has problems
--No bluetooth
+Tested with:
+Arch Linux
+Debian wheezy (had problems with UDEV)
 
-Conclusion:
-This device NEEDS normal mainline support ;-)
+2. Hardware
+
+2.1 USB stack
+
+Is the main thing that should work as stable as AK-47 if you want this
+working as the home server. Original drivers unfortunately sucks and no
+USB wifi adapters is working. The speed with mass storage, however, is
+acceptable enough, for example, for burning BLU-rays. As many as possible
+hardware returned back from the Linux kernel.
+
+USB stack has two versions of the DWC OTG driver.
+v2.7 looks like more stable but with limited hardware support. There is
+a workaround to make USB WiFi adapters working ('buffer not align to 4 bytes'
+message).
+v3.1 is not stable.
+
+2.2 Wifi
+
+The stock driver for AP6210 should be disabled. It was not designed for
+work and just like the pain in the ass. Don't waste time and buy a good USB
+adapter like ALFA AWUS036 with old Realtek\Atheros chipsets. Even if there
+will be a good driver, the signal strengh will not be good enough. There is
+a couple of good adapters returned back from the Linux 3.0.36 kernel.
+Don't buy adapters with new chipsets since the kernel is old.
+
+2.2.1 AP6210
+
+The driver is not usable with Linux. Only for reference purposes for mainline.
+
+2.3 Bluetooth
+
+Just does not work like in any other Linux distribution based on this kernel.
+
+2.4 Display/HDMI
+
+Works acceptable but not without the flaws. Console mapped to the framebuffer
+in the config.
