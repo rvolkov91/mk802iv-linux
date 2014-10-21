@@ -48,6 +48,7 @@
 #include <linux/interrupt.h>
 #include <linux/string.h>
 #include <linux/irq.h>
+#include <linux/dma-mapping.h>
 
 #include "dwc_otg_driver.h"
 #include "dwc_otg_hcd.h"
@@ -82,7 +83,7 @@ dwc_otg_qh_t *dwc_otg_hcd_qh_create (dwc_otg_hcd_t *_hcd, struct urb *_urb)
  *
  * @param[in] _qh The QH to free.
  */
-void dwc_otg_hcd_qh_free (dwc_otg_qh_t *_qh)
+void dwc_otg_hcd_qh_free (dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh)
 {
 	dwc_otg_qtd_t *qtd;
 	struct list_head *pos;
@@ -106,7 +107,14 @@ void dwc_otg_hcd_qh_free (dwc_otg_qh_t *_qh)
 		dwc_otg_hcd_qtd_free (qtd);
 		qtd=NULL;
 	}
-    
+	
+	if (_qh->dw_align_buf) {
+		uint32_t bufsize = _qh->ep_type == PIPE_ISOCHRONOUS ?
+			4096 : _hcd->core_if->core_params->max_transfer_size;
+		dma_free_coherent(NULL, bufsize, _qh->dw_align_buf,
+			_qh->dw_align_buf_dma);
+	}
+	
 	kfree (_qh);
 	_qh = NULL;
 	local_irq_restore(flags);

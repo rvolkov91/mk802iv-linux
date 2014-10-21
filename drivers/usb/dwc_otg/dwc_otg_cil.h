@@ -195,6 +195,11 @@ typedef struct dwc_hc
 	/** @name Transfer State */
 	/** @{ */
 
+	/**
+	 * In buffer DMA mode this buffer will be used
+	 * if xfer_buff is not DWORD aligned.
+	 */
+	dma_addr_t align_buf;
 	/** Pointer to the current transfer buffer position. */
 	uint8_t *xfer_buff;
 	/** Total number of bytes to transfer. */

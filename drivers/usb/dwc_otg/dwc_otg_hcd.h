@@ -217,6 +217,10 @@ typedef struct dwc_otg_qh {
 
 	/** @} */
 
+	/** Used instead of original buffer if not DWORD aligned */
+	uint32_t *dw_align_buf;
+	dma_addr_t dw_align_buf_dma;
+
 	/** Entry for QH in either the periodic or non-periodic schedule. */
 	struct list_head        qh_list_entry;
 } dwc_otg_qh_t;
@@ -491,7 +495,7 @@ extern int32_t dwc_otg_hcd_handle_wakeup_detected_intr (dwc_otg_hcd_t *_dwc_otg_
 /* Implemented in dwc_otg_hcd_queue.c */
 extern dwc_otg_qh_t *dwc_otg_hcd_qh_create (dwc_otg_hcd_t *_hcd, struct urb *_urb);
 extern void dwc_otg_hcd_qh_init (dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh, struct urb *_urb);
-extern void dwc_otg_hcd_qh_free (dwc_otg_qh_t *_qh);
+extern void dwc_otg_hcd_qh_free (dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh);
 extern int dwc_otg_hcd_qh_add (dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh);
 extern void dwc_otg_hcd_qh_remove (dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh);
 extern void dwc_otg_hcd_qh_deactivate (dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh, int sched_csplit);
@@ -501,7 +505,7 @@ static inline void dwc_otg_hcd_qh_remove_and_free (dwc_otg_hcd_t *_hcd,
 						   dwc_otg_qh_t *_qh)
 {
 	dwc_otg_hcd_qh_remove (_hcd, _qh);
-	dwc_otg_hcd_qh_free (_qh);
+	dwc_otg_hcd_qh_free (_hcd, _qh);
 }
 
 /** Allocates memory for a QH structure.

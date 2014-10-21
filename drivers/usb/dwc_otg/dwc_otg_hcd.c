@@ -1546,11 +1546,7 @@ int dwc_otg_hcd_urb_enqueue(struct usb_hcd *_hcd,
         DWC_PRINT("%s urb %p already in queue, qtd %p, count%d\n", __func__, _urb, _urb->hcpriv, atomic_read(&_urb->use_count));
         goto out;
     }
-    if((uint32_t)_urb->transfer_buffer & 3){
-        retval = -EPERM;
-        DWC_PRINT("%s urb->transfer_buffer address not align to 4-byte 0x%x\n", __func__, (uint32_t)_urb->transfer_buffer);
-        goto out;
-    }
+
 #ifdef DEBUG
 	    if (CHK_DEBUG_LEVEL(DBG_HCDV | DBG_HCD_URB)) {
 		dump_urb_info(_urb, "dwc_otg_hcd_urb_enqueue");
@@ -2724,6 +2720,7 @@ static int assign_and_init_hc(dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh)
 	dwc_otg_qtd_t	*qtd;
 	struct urb	*urb;
 	int  retval = 0;
+	uint8_t *ptr = NULL;
 
 	DWC_DEBUGPL(DBG_HCDV, "%s(%p,%p)\n", __func__, _hcd, _qh);
 	hc = list_entry(_hcd->free_hc_list.next, dwc_hc_t, hc_list_entry);
@@ -2788,6 +2785,10 @@ static int assign_and_init_hc(dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh)
 
 	if (_hcd->core_if->dma_enable) {
 		hc->xfer_buff = (uint8_t *)urb->transfer_dma + urb->actual_length;
+		/* For non-dword aligned case */
+		if ((uint32_t)hc->xfer_buff & 3) {
+			ptr = (uint8_t *)urb->transfer_buffer + urb->actual_length;
+		}
 	} else {
 		hc->xfer_buff = (uint8_t *)urb->transfer_buffer + urb->actual_length;
 	}
@@ -2821,6 +2822,7 @@ static int assign_and_init_hc(dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh)
 				hc->xfer_buff = (uint8_t *)urb->setup_packet;
 			}
 			hc->xfer_len = 8;
+			ptr = NULL;
 			break;
 		case DWC_OTG_CONTROL_DATA:
 			DWC_DEBUGPL(DBG_HCDV, "  Control data transaction\n");
@@ -2847,6 +2849,7 @@ static int assign_and_init_hc(dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh)
 			} else {
 				hc->xfer_buff = (uint8_t *)_hcd->status_buf;
 			}
+			ptr = NULL;
 			break;
 		}
 		break;
@@ -2869,6 +2872,14 @@ static int assign_and_init_hc(dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh)
 			hc->xfer_buff += frame_desc->offset + qtd->isoc_split_offset;
 			hc->xfer_len = frame_desc->length - qtd->isoc_split_offset;
 
+			/* For non-dword aligned buffers */
+			if (((uint32_t)hc->xfer_buff & 3) && _hcd->core_if->dma_enable) {
+				ptr = (uint8_t *)urb->transfer_buffer + frame_desc->offset + qtd->isoc_split_offset;
+			}
+			else {
+				ptr = NULL;
+			}
+
 			if (hc->xact_pos == DWC_HCSPLIT_XACTPOS_ALL) {
 				if (hc->xfer_len <= 188) {
 					hc->xact_pos = DWC_HCSPLIT_XACTPOS_ALL;
@@ -2879,6 +2890,35 @@ static int assign_and_init_hc(dwc_otg_hcd_t *_hcd, dwc_otg_qh_t *_qh)
 			}
 		}
 		break;
+	}
+	
+	/* Non-dword aligned buffer cases */
+	if (ptr) {
+		uint32_t buf_size;
+		if (hc->ep_type != DWC_OTG_EP_TYPE_ISOC) {
+			buf_size = _hcd->core_if->core_params->max_transfer_size;
+		}
+		else {
+			buf_size = 4096;
+		}
+		if (!_qh->dw_align_buf) {
+			_qh->dw_align_buf = dma_alloc_coherent(NULL,
+				buf_size, &_qh->dw_align_buf_dma, GFP_ATOMIC);
+			//dwc_dma_alloc_atomic(buf_size,
+			//	&_qh->dw_align_buf_dma);
+			if (!_qh->dw_align_buf) {
+				DWC_ERROR("%s: Failed to align buffer: no memory available\n",
+					__func__);
+				return -ENOMEM;
+			}
+		}
+		if (!hc->ep_is_in) {
+			memcpy(_qh->dw_align_buf, ptr, hc->xfer_len);
+		}
+		hc->align_buf = _qh->dw_align_buf_dma;
+	}
+	else {
+		hc->align_buf = 0;
 	}
 
 	if (hc->ep_type == DWC_OTG_EP_TYPE_INTR ||

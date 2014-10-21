@@ -1640,7 +1640,10 @@ void dwc_otg_hc_start_transfer(dwc_otg_core_if_t *_core_if, dwc_hc_t *_hc)
 
 	if (_core_if->dma_enable) 
 	{
-		dwc_write_reg32(&hc_regs->hcdma, (uint32_t)_hc->xfer_buff);
+		dma_addr_t dma_addr;
+		dma_addr = _hc->align_buf ? _hc->align_buf :
+			(dma_addr_t)_hc->xfer_buff;
+		dwc_write_reg32(&hc_regs->hcdma, dma_addr);
 	}
 
 	/* Start the split */
