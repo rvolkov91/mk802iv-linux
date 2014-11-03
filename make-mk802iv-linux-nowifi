@@ -1,0 +1,31 @@
+#!/bin/bash
+
+TOOLCHAIN=arm-linux-gnueabihf-
+
+THREADS=6
+if [ -f /proc/cpuinfo ]; then
+	THREADS=`grep -c ^processor /proc/cpuinfo`
+	THREADS=$(($THREADS + 1))
+fi
+
+if [ "$1" == "--download" ]; then
+	source ./get-linaro-toolchain
+fi
+
+./gcc-check || exit 1
+echo -e "Building with $THREADS threads\n"
+
+gcc --version
+echo -e "\e[32mExecuting defconfig...\e[0m"
+
+if [ -f .config ]; then
+	echo "Skipped, .config already exists"
+else
+	make -j $THREADS ARCH=arm CROSS_COMPILE=$TOOLCHAIN \
+		mk802iv_minimal_defconfig || exit 1
+fi
+
+echo -e "\e[32mExecuting build...\e[0m"
+make -j $THREADS ARCH=arm CROSS_COMPILE=$TOOLCHAIN || exit 1
+echo -e "\e[32mCreating kernel image for Rikomagic bootloader...\e[0m"
+./mkkrnlimg ./arch/arm/boot/zImage ./kernel.img || exit 1

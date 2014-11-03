@@ -1,0 +1,30 @@
+#!/bin/bash
+
+MSG=\
+"It is highly recommended to use Linaro toolchain with GCC 4.7 to build this"\
+"\nkernel. It is known issue that GCC newer than 4.7 produces broken image "\
+"that\nwill not even boot.\n\n"\
+"Useful links:\nhttps://gcc.gnu.org/faq.html#multiple\nhttps://wiki.linaro.or"\
+"g/Cbuildv2\nhttp://releases.linaro.org/13.04"\
+"/components/toolchain/binaries/gcc-linaro-arm-linux-gnueabihf-4.7-2"\
+"013.04-20130415_linux.tar.bz2\nhttp://releases.linaro.org/13.04/com"\
+"ponents/toolchain/binaries/gcc-linaro-arm-linux-gnueabihf-4.7-2013."\
+"04-20130415_src.tar.bz2\n"
+
+CMD=arm-linux-gnueabihf-gcc
+
+echo -n "Checking GCC version... "
+if $CMD --version 2>/dev/null | grep "4.[3-7]." \
+					> /dev/null 2>/dev/null; then
+	echo "OK"
+	exit 0
+else
+	if type $CMD >/dev/null 2>/dev/null; then
+		echo -e "Unsupported\n"
+		echo -en $MSG
+		exit 1
+	fi
+	echo -e "Not installed\n"
+	echo -en $MSG
+	exit 2
+fi

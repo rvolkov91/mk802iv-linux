@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Correct the link if it is dead. You can place existing file and re-run the
+# script, this will not download the file and use local copy instead.
+RELEASE=gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux
+FILENAME=$RELEASE.tar.bz2
+URL=http://releases.linaro.org/13.04/components/toolchain/binaries/$FILENAME
+FOLDER=toolchain
+
+echo -e "\n\e[32mDownloading toolchain...\e[0m\n"
+mkdir -p $FOLDER || exit 1
+cd $FOLDER || exit 1
+if [ ! -f $FILENAME ]; then
+	wget -c -T 30 $URL || exit 1
+fi
+echo -en "\e[32mUnpacking... \e[0m"
+if [ ! -d $RELEASE ]; then
+	tar -xf $FILENAME || exit 1
+fi
+export PATH=$PATH:$PWD/$RELEASE/bin || exit 1
+cd ..
+echo -e "\e[32mDone. The toolchain is now in the PATH variable\e[0m\n"
