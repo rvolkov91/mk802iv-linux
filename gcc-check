@@ -3,13 +3,10 @@
 MSG=\
 "It is highly recommended to use Linaro toolchain with GCC 4.7 to build this"\
 "\nkernel. It is known issue that GCC newer than 4.7 produces broken image "\
-"that\nwill not even boot.\n\n"\
+"that\nwill not even boot. Alternatively, you can cross fingers and re-run "\
+"this script with --download option.\n\n"\
 "Useful links:\nhttps://gcc.gnu.org/faq.html#multiple\nhttps://wiki.linaro.or"\
-"g/Cbuildv2\nhttp://releases.linaro.org/13.04"\
-"/components/toolchain/binaries/gcc-linaro-arm-linux-gnueabihf-4.7-2"\
-"013.04-20130415_linux.tar.bz2\nhttp://releases.linaro.org/13.04/com"\
-"ponents/toolchain/binaries/gcc-linaro-arm-linux-gnueabihf-4.7-2013."\
-"04-20130415_src.tar.bz2\n"
+"g/Cbuildv2\n"
 
 CMD=arm-linux-gnueabihf-gcc
 
