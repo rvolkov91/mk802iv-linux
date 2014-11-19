@@ -29,3 +29,7 @@ echo -e "\e[32mExecuting build...\e[0m"
 make -j $THREADS ARCH=arm CROSS_COMPILE=$TOOLCHAIN || exit 1
 echo -e "\e[32mCreating kernel image for Rikomagic bootloader...\e[0m"
 ./mkkrnlimg ./arch/arm/boot/zImage ./kernel.img || exit 1
+
+echo -e "\e[32mInstalling modules to the ./modules directory\e[0m"
+rm -Rf ./modules || exit 1
+make ARCH=arm CROSS_COMPILE=$TOOLCHAIN INSTALL_MOD_PATH=./modules modules_install
